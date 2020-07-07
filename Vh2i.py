@@ -1,4 +1,5 @@
 def calc():
-  print('calcの中身')
+    print('calcの中身')
+
 
 calc()

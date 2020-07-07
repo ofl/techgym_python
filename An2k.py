@@ -1,4 +1,5 @@
 def calc(a):
-  print('a = ' + str(a))
+    print('a = ' + str(a))
+
 
 calc(3)

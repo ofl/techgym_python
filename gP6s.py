@@ -1,22 +1,27 @@
 import random
 
+
 def start_message():
-  print('じゃんけんスタート')
+    print('じゃんけんスタート')
+
 
 def get_my_hand():
-  print('自分の手を入力してください')
-  return int(input('0:グー, 1:チョキ, 2:パー'))
+    print('自分の手を入力してください')
+    return int(input('0:グー, 1:チョキ, 2:パー'))
+
 
 def get_you_hand():
-  return random.randint(0, 2)
+    return random.randint(0, 2)
+
 
 def view_result(hand_diff):
-  if hand_diff == 0:
-    print('あいこ')
-  elif hand_diff == -1 or hand_diff == 2:
-    print('勝ち')
-  else:
-    print('負け')
+    if hand_diff == 0:
+        print('あいこ')
+    elif hand_diff == -1 or hand_diff == 2:
+        print('勝ち')
+    else:
+        print('負け')
+
 
 start_message()
 

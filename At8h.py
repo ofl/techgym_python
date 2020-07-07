@@ -1,16 +1,20 @@
 import random
 
+
 class Player:
-  def __init__(self, name, coin):
-    self.name = name
-    self.coin = coin
+    def __init__(self, name, coin):
+        self.name = name
+        self.coin = coin
+
 
 class Human(Player):
-  def __init__(self, name, coin):
-    self.name = name
-    self.coin = coin
+    def __init__(self, name, coin):
+        self.name = name
+        self.coin = coin
+
 
 def play():
-  print('デバッグログ：play()')
+    print('デバッグログ：play()')
+
 
 play()
