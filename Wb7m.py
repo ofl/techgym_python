@@ -9,4 +9,4 @@ soup = BeautifulSoup(response.text, 'lxml')
 titles = soup.find_all('li', class_='topicsListItem')
 
 for title in titles:
-  print(title.getText())
+    print(title.getText())
