@@ -16,5 +16,3 @@ elif my_hand == 1:
         print('負け')
     elif you_hand == 1:
         print('あいこ')
-
-print('exit')
