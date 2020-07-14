@@ -10,7 +10,7 @@ class RockPaperScissors:
         self.__computer_hand = None
         self.__player_hand = None
         # コンピュータの手から自分の手を引いた数を3で割った余りの数
-        self.__last_modulo = None
+        self.__modulo = None
 
     def show_welcome_message(self):
         print('じゃんけん、スタート！')
@@ -20,7 +20,7 @@ class RockPaperScissors:
 
         self.__set_computer_hand()
         self.__set_player_hand()
-        self.__set_last_modulo()
+        self.__set_modulo()
 
         self.__show_result()
 
@@ -55,16 +55,16 @@ class RockPaperScissors:
     def __set_computer_hand(self):
         self.__computer_hand = random.randint(0, self.__index_of_last_hand)
 
-    def __set_last_modulo(self):
+    def __set_modulo(self):
         difference = self.__computer_hand - self.__player_hand
-        self.__last_modulo = difference % self.__len_of_hand_list
+        self.__modulo = difference % self.__len_of_hand_list
 
     def __show_result(self):
         print('あなたの手は ' + self.__HANDS[self.__player_hand])
         print('コンピュータの手は ' + self.__HANDS[self.__computer_hand])
         time.sleep(1)
 
-        print(self.__RESULT_MESSAGES[self.__last_modulo])
+        print(self.__RESULT_MESSAGES[self.__modulo])
 
     def __is_valid(self, value):
         # 入力された値が「0」か「1」か「2」のいずれかの文字であるを判定
@@ -73,11 +73,11 @@ class RockPaperScissors:
     # あいこかどうか
     @property
     def __is_draw(self):
-        return self.__last_modulo == 0
+        return self.__modulo == 0
 
     @property
     def __is_first_game(self):
-        return self.__last_modulo == None
+        return self.__modulo == None
 
     @property
     def __len_of_hand_list(self):
