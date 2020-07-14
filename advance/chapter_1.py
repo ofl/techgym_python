@@ -7,6 +7,8 @@ class RockPaperScissors:
     __RESULT_MESSAGES = ['引き分けです\n', 'あなたの勝ちです', 'あなたの負けです']
 
     def __init__(self):
+        self.__computer_hand = None
+        self.__player_hand = None
         # コンピュータの手から自分の手を引いた数を3で割った余りの数
         self.__last_modulo = None
 
@@ -16,11 +18,11 @@ class RockPaperScissors:
     def play(self):
         self.__show_start_message()
 
-        computer_hand = self.__get_computer_hand()
-        player_hand = self.__get_player_hand()
+        self.__set_computer_hand()
+        self.__set_player_hand()
+        self.__set_last_modulo()
 
-        self.__set_last_modulo(computer_hand, player_hand)
-        self.__show_result(computer_hand, player_hand)
+        self.__show_result()
 
     @property
     def is_not_game_end(self):
@@ -37,7 +39,7 @@ class RockPaperScissors:
         time.sleep(1)
 
     # 標準入力からプレイヤーの選択した手(0~2までの文字)を受け取り数値に変換して返す
-    def __get_player_hand(self):
+    def __set_player_hand(self):
         print('あなたの手を入力してください')
         is_valid = False
         message = self.__waiting_message
@@ -48,18 +50,18 @@ class RockPaperScissors:
             is_valid = self.__is_valid(player_input)
             if not is_valid:
                 print(f"0 ~ {self.__index_of_last_hand}のいずれかの数字を入力してください")
-        return int(player_input)
+        self.__player_hand = int(player_input)
 
-    def __get_computer_hand(self):
-        return random.randint(0, self.__index_of_last_hand)
+    def __set_computer_hand(self):
+        self.__computer_hand = random.randint(0, self.__index_of_last_hand)
 
-    def __set_last_modulo(self, computer_hand, player_hand):
-        difference = computer_hand - player_hand
+    def __set_last_modulo(self):
+        difference = self.__computer_hand - self.__player_hand
         self.__last_modulo = difference % self.__len_of_hand_list
 
-    def __show_result(self, computer_hand, player_hand):
-        print('あなたの手は ' + self.__HANDS[player_hand])
-        print('コンピュータの手は ' + self.__HANDS[computer_hand])
+    def __show_result(self):
+        print('あなたの手は ' + self.__HANDS[self.__player_hand])
+        print('コンピュータの手は ' + self.__HANDS[self.__computer_hand])
         time.sleep(1)
 
         print(self.__RESULT_MESSAGES[self.__last_modulo])
