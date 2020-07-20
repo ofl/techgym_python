@@ -1,8 +1,8 @@
-# ifやelseを使って条件を分岐してみましょう。
+# 「if」や「elif」や「else」を使って条件を分岐してみましょう。
 
 
 age = int(input("年齢を入力してください。"))
-gender = int(input("性別は？(0: 男性、1: 女性)。"))
+gender = int(input("性別は？(0: 男性、1: 女性、3: 未回答)。"))
 
 
 if age >= 20:
@@ -10,9 +10,11 @@ if age >= 20:
 else:
     adult_text = '未成年の'
 
-if gender < 1:
+if gender == 0:
     gender_text = '男性ですね。'
-else:
+elif gender == 1:
     gender_text = '女性ですね。'
+else:
+    gender_text = '性別不明な方ですね。'
 
 print(adult_text + gender_text)
