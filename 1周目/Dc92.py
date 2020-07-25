@@ -1,6 +1,8 @@
 import random
 
 teams = []
+playing_teams = {}
+player_name = dict(myself='自分', enemy='相手')
 
 
 class Team:
@@ -34,6 +36,15 @@ def show_teams():
 def play():
     create_teams()
     show_teams()
+    choice_team('myself')
+    choice_team('enemy')
+
+
+def choice_team(player):
+    global playing_teams
+    num = int(input(f"{player_name[player]}のチームを選択してください(1~3)")) - 1
+    playing_teams[player] = teams[num]
+    print(f"{player_name[player]}のチームは「{teams[num].name}」です")
 
 
 play()
