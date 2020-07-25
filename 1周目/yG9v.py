@@ -1,7 +1,8 @@
 import random
+import math
 
 teams = []
-playing_teams = {'myself': False, 'enemy': False}
+playing_teams = {'myself': None, 'enemy': None}
 
 
 class Team:
@@ -13,6 +14,12 @@ class Team:
     def info(self):
         print(self.name + ': 攻撃力:' + str(self.attack) +
               ' / 守備力:' + str(self.defense))
+
+    def get_hit_rate(self):
+        return random.randint(10, self.attack)
+
+    def get_out_rate(self):
+        return random.randint(10, self.defense)
 
 
 def create_teams():
@@ -43,11 +50,22 @@ def choice_team(player):
     print(player_name + 'のチームは「' + playing_teams[player].name + '」です')
 
 
+def get_play_inning():
+    rate = playing_teams['myself'].get_hit_rate()
+    - playing_teams['enemy'].get_out_rate()
+    score = math.floor(rate / 10)
+    if score < 0:
+        return 0
+    else:
+        return score
+
+
 def play():
     create_teams()
     show_teams()
     choice_team('myself')
     choice_team('enemy')
+    print(get_play_inning())
 
 
 play()

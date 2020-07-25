@@ -2,7 +2,8 @@ import random
 import math
 
 teams = []
-playing_teams = {'myself': False, 'enemy': False}
+playing_teams = {'myself': None, 'enemy': None}
+inning_type = {'front': '表', 'back': '裏'}
 
 
 class Team:
@@ -50,9 +51,16 @@ def choice_team(player):
     print(player_name + 'のチームは「' + playing_teams[player].name + '」です')
 
 
-def get_play_inning():
-    hit_rate = playing_teams['myself'].get_hit_rate()
-    out_rate = playing_teams['enemy'].get_out_rate()
+def get_play_inning(inning):
+    if inning == 'front':
+        offence = 'myself'
+        defense = 'enemy'
+    else:
+        defense = 'myself'
+        offence = 'enemy'
+
+    hit_rate = playing_teams[offence].get_hit_rate()
+    out_rate = playing_teams[defense].get_out_rate()
     inning_score = math.floor((hit_rate - out_rate) / 10)
     if inning_score < 0:
         inning_score = 0
@@ -64,8 +72,14 @@ def play():
     show_teams()
     choice_team('myself')
     choice_team('enemy')
-    inning_score = get_play_inning()
-    print('デバッグログ：' + str(inning_score))
+
+    for i in range(9):
+        round_num = f"{str(i + 1)}回"
+        for j in range(2):
+            inning = ('front' if j % 2 == 0 else 'back')
+            inning_score = get_play_inning(inning)
+            print('デバッグログ：' + round_num +
+                  inning_type[inning] + str(inning_score))
 
 
 play()

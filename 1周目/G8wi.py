@@ -9,6 +9,9 @@ class Team:
         self.attack = attack
         self.defense = defense
 
+    def info(self):
+        print(f"{self.name}: 攻撃力:{self.attack} / 守備力:{self.defense}")
+
 
 def create_teams():
     global teams
@@ -21,6 +24,7 @@ def create_teams():
 def play():
     print('デバッグログ：play()')
     create_teams()
+    teams[1].info()
 
 
 play()

@@ -2,7 +2,9 @@ import random
 import math
 
 teams = []
-playing_teams = {'myself': False, 'enemy': False}
+playing_teams = {'myself': None, 'enemy': None}
+inning_type = {'front': '表', 'back': '裏'}
+innings = []
 
 
 class Team:
@@ -10,6 +12,8 @@ class Team:
         self.name = name
         self.attack = attack
         self.defense = defense
+        self.scores = []
+        self.total_score = 0
 
     def info(self):
         print(self.name + ': 攻撃力:' + str(self.attack) +
@@ -20,6 +24,10 @@ class Team:
 
     def get_out_rate(self):
         return random.randint(10, self.defense)
+
+    @property
+    def scoreboard(self):
+        return ' | '.join(self.scores)
 
 
 def create_teams():
@@ -52,14 +60,19 @@ def choice_team(player):
 
 def get_play_inning(inning):
     if inning == 'front':
-        hit_rate = playing_teams['myself'].get_hit_rate()
-        out_rate = playing_teams['enemy'].get_out_rate()
-    elif inning == 'back':
-        hit_rate = playing_teams['enemy'].get_hit_rate()
-        out_rate = playing_teams['myself'].get_out_rate()
+        offence = 'myself'
+        defense = 'enemy'
+    else:
+        defense = 'myself'
+        offence = 'enemy'
+
+    hit_rate = playing_teams[offence].get_hit_rate()
+    out_rate = playing_teams[defense].get_out_rate()
     inning_score = math.floor((hit_rate - out_rate) / 10)
     if inning_score < 0:
         inning_score = 0
+    playing_teams[offence].total_score += inning_score
+    playing_teams[offence].scores.append(str(inning_score))
     return inning_score
 
 
@@ -69,10 +82,16 @@ def play():
     choice_team('myself')
     choice_team('enemy')
     for i in range(9):
-        inning_score = get_play_inning('front')
-        print('デバッグログ：' + str(i + 1) + '回表 ' + str(inning_score))
-        inning_score = get_play_inning('back')
-        print('デバッグログ：' + str(i + 1) + '回裏 ' + str(inning_score))
+        innings.append(str(i))
+        for j in range(2):
+            inning = ('front' if j % 2 == 0 else 'back')
+            get_play_inning(inning)
+    my_team = playing_teams['myself']
+    enemy_team = playing_teams['enemy']
+
+    print(f"　　| {' | '.join(innings)} | R |")
+    print(f"自分| {my_team.scoreboard} | {str(my_team.total_score)} |")
+    print(f"相手| {enemy_team.scoreboard} | {str(enemy_team.total_score)} |")
 
 
 play()

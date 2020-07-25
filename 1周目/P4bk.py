@@ -20,11 +20,17 @@ def create_teams():
     team2 = Team('ディフェンダーズ', 30, 70)
     team3 = Team('アベレージーズ', 50, 50)
     teams = [team1, team2, team3]
-    team1.info()
+
+
+def show_teams():
+    for i, team in enumerate(teams):
+        print(i + 1)
+        team.info()
 
 
 def play():
     create_teams()
+    show_teams()
 
 
 play()
