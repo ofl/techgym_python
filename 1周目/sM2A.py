@@ -97,6 +97,10 @@ def win():
     print('勝ち')
 
 
+def loose():
+    print('負け')
+
+
 def choice():
     message = 'ヒット[1] or スタンド[2]'
     choice_key = input(message)
@@ -136,11 +140,20 @@ def is_blackjack():
         return False
 
 
+def is_burst():
+    if(players[0].total_number > 21):
+        return True
+    else:
+        return False
+
+
 def hit():
     deal_card(players[0])
     show_cards(players[0].cards)
     if is_blackjack():
         win()
+    elif is_burst():
+        loose()
     else:
         choice_key = choice()
         if choice_key == 1:

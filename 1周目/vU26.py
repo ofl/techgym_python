@@ -164,8 +164,15 @@ def hit():
             stand()
 
 
+def judge():
+    print('結果')
+
+
 def stand():
-    deal_card(players[1])
+    while players[1].total_number < 18:
+        deal_card(players[1])
+    else:
+        judge()
 
 
 def play():

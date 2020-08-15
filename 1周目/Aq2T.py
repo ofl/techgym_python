@@ -7,6 +7,14 @@ import numpy as np
 card_images = []
 
 
+class Card:
+    def __init__(self, mark, display_name, number, image):
+        self.mark = mark
+        self.display_name = display_name
+        self.number = number
+        self.image = image
+
+
 def load_image():
     image_name = 'cards.jpg'
     vsplit_number = 4
@@ -34,17 +42,6 @@ def load_image():
 def play():
     print('デバッグログ：play()')
     load_image()
-    show_test()
-
-
-def show_test():
-    plt.subplot(1, 6, 1)
-    plt.axis("off")
-    plt.imshow(card_images[5])
-    plt.subplot(1, 6, 2)
-    plt.axis("off")
-    plt.imshow(card_images[6])
-    plt.show()
 
 
 play()

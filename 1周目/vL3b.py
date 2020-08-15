@@ -100,6 +100,8 @@ def play():
     players.append(Computer())
     deal_card(players[0])
     deal_card(players[1])
+    for card in players[0].cards:
+        show_card(card)
 
 
 play()

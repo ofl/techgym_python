@@ -3,6 +3,7 @@ import cv2 as cv
 import os
 import matplotlib.pyplot as plt
 import numpy as np
+import random
 
 card_images = []
 cards = []
@@ -39,6 +40,7 @@ class Card:
         self.display_name = display_name
         self.number = number
         self.image = image
+        self.used = False
 
 
 class Player:
@@ -79,12 +81,23 @@ def show_card(card):
     plt.show()
 
 
+def deal_card(player):
+    while True:
+        card = cards[random.randint(0, len(cards))]
+        if not card.used:
+            card.used = True
+            player.cards.append(card)
+            break
+
+
 def play():
     print('デバッグログ：play()')
     load_image()
     create_cards()
     players.append(Human())
     players.append(Computer())
+    for player in players:
+        deal_card(player)
 
 
 play()

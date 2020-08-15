@@ -109,6 +109,10 @@ def choice():
     return int(choice_key)
 
 
+def stand():
+    deal_card(players[1])
+
+
 def enable_choice(string):
     if string.isdigit():
         number = int(string)
@@ -131,6 +135,8 @@ def play_once():
         choice_key = choice()
         if choice_key == 1:
             hit()
+        else:
+            stand()
 
 
 def is_blackjack():
@@ -158,6 +164,8 @@ def hit():
         choice_key = choice()
         if choice_key == 1:
             hit()
+        else:
+            stand()
 
 
 def play():

@@ -151,8 +151,8 @@ def is_blackjack():
         return False
 
 
-def is_burst():
-    if(players[0].total_number >= 22):
+def is_burst(player):
+    if(player.total_number >= 22):
         return True
     else:
         return False
@@ -163,7 +163,7 @@ def hit():
     show_cards(players[0].cards)
     if is_blackjack():
         win()
-    elif is_burst():
+    elif is_burst(players[0]):
         lose()
     else:
         choice_key = choice()
@@ -177,6 +177,8 @@ def stand():
     deal_card(players[1])
     if players[1].total_number < 17:
         stand()
+    elif is_burst(players[1]):
+        win()
     else:
         result = judge()
         show_result(result)

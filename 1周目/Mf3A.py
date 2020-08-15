@@ -151,6 +151,7 @@ def is_burst():
 
 def hit():
     deal_card(players[0])
+    calc_ace(players[0])
     show_cards(players[0].cards)
     if is_blackjack():
         win()
@@ -166,6 +167,7 @@ def hit():
 
 def stand():
     deal_card(players[1])
+    calc_ace(players[1])
     if players[1].total_number < 17:
         stand()
     else:
@@ -183,6 +185,20 @@ def judge():
     else:
         result = 'lose'
     return result
+
+
+def calc_ace(player):
+    if player.total_number <= 21:
+        return
+
+    for card in player.cards:
+        if card.display_name == 'A' and card.number == 11:
+            card.number = 1
+            player.total_number -= 10
+            break
+
+    if player.total_number > 21:
+        calc_ace(player)
 
 
 def show_result(result):

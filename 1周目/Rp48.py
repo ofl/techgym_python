@@ -97,6 +97,21 @@ def win():
     print('勝ち')
 
 
+def choice():
+    while True:
+        stiring = input('ヒット[1] or スタンド[2]')
+        if enable_choice(stiring):
+            break
+    return int(stiring)
+
+
+def enable_choice(string):
+    if not string.isdigit():
+        return False
+    num = int(string)
+    return num == 1 or num == 2
+
+
 def play():
     print('デバッグログ：play()')
     load_image()
@@ -110,6 +125,7 @@ def play():
 
     if(players[0].total_number == 21):
         win()
+    choice()
 
 
 play()

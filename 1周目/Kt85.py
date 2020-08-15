@@ -103,11 +103,11 @@ def calc_ace(player):
 
 
 def win():
-    print('勝ち')
+    show_result('win')
 
 
 def lose():
-    print('負け')
+    show_result('loose')
 
 
 def choice():
@@ -186,7 +186,6 @@ def stand():
 
 
 def judge():
-    print('結果')
     diff = players[0].total_number - players[1].total_number
     if diff == 0:
         result = 'draw'
@@ -211,7 +210,6 @@ def show_result(result):
 
 
 def play():
-    print('デバッグログ：play()')
     load_image()
     create_cards()
     players.append(Human())
