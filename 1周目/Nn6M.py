@@ -73,11 +73,12 @@ def create_cards():
                 Card(mark, display_names[j], number, card_images[i*len(numbers)+j]))
 
 
-def show_card(card):
-    print(f"{card.mark}{card.display_name}")
-    plt.subplot(1, 6, 1)
-    plt.axis("off")
-    plt.imshow(card.image)
+def show_cards(cards):
+    for i, card in enumerate(cards):
+        print(f"{card.mark}{card.display_name}")
+        plt.subplot(1, 6, i + 1)
+        plt.axis("off")
+        plt.imshow(card.image)
     plt.show()
 
 
@@ -100,7 +101,8 @@ def play():
     players.append(Computer())
     deal_card(players[0])
     deal_card(players[1])
-    show_card(players[0].cards[0])
+    deal_card(players[0])
+    show_cards(players[0].cards)
 
 
 play()

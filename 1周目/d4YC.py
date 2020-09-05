@@ -116,6 +116,21 @@ def enable_choice(string):
         return False
 
 
+def play_once():
+    hit()
+    if is_blackjack():
+        win()
+
+
+def hit():
+    deal_card(players[0])
+    show_cards(players[0].cards)
+
+
+def is_blackjack():
+    return players[0].total_number == 21
+
+
 def play():
     print('デバッグログ：play()')
     load_image()
@@ -124,12 +139,11 @@ def play():
     players.append(Computer())
     deal_card(players[0])
     deal_card(players[1])
-    deal_card(players[0])
-    show_cards(players[0].cards)
-    choice()
 
-    if(players[0].total_number == 21):
-        win()
+    play_once()
+
+    while choice() == 1:
+        play_once()
 
 
 play()

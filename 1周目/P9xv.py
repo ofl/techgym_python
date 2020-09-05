@@ -40,6 +40,13 @@ class Card:
         self.image = image
 
 
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.cards = []
+        self.total_number = 0
+
+
 def create_cards():
     cards.clear()
     marks = ['ハート', 'スペード', 'ダイヤ', 'クローバー']
@@ -65,7 +72,6 @@ def play():
     print('デバッグログ：play()')
     load_image()
     create_cards()
-    show_card(cards[10])
 
 
 play()

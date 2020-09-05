@@ -6,6 +6,7 @@ import numpy as np
 
 card_images = []
 cards = []
+players = []
 
 
 def load_image():
@@ -82,6 +83,8 @@ def play():
     print('デバッグログ：play()')
     load_image()
     create_cards()
+    players.append(Human())
+    players.append(Computer())
 
 
 play()

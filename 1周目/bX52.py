@@ -93,6 +93,10 @@ def deal_card(player):
     player.total_number += tmp_card.number
 
 
+def win():
+    print('勝ち')
+
+
 def play():
     print('デバッグログ：play()')
     load_image()
@@ -103,6 +107,8 @@ def play():
     deal_card(players[1])
     deal_card(players[0])
     show_cards(players[0].cards)
+    if players[0].total_number == 21:
+        win()
 
 
 play()

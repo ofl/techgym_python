@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 card_images = []
+cards = []
 
 
 def load_image():
@@ -42,6 +43,17 @@ class Card:
 def play():
     print('デバッグログ：play()')
     load_image()
+    create_cards()
+    print(cards)
+
+
+def create_cards():
+    marks = ['ハート', 'スペード', 'ダイヤ', 'クローバー']
+    display_names = ['A', '2', '3', '4', '5',
+                     '6', '7', '8', '9', '10', 'J', 'Q', 'K']
+    for mark in marks:
+        for i, display_name in enumerate(display_names):
+            cards.append(Card(mark, display_name, i + 1, card_images[i]))
 
 
 play()

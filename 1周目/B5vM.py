@@ -169,11 +169,31 @@ def stand():
     if players[1].total_number < 17:
         stand()
     else:
-        judge()
+        result = judge()
+        show_result(result)
 
 
 def judge():
-    print('結果')
+    if players[1].total_number > 21:
+        return 'loose'
+
+    if players[0].total_number > players[1].total_number:
+        return 'win'
+    elif players[0].total_number < players[1].total_number:
+        return 'loose'
+    else:
+        return 'draw'
+
+
+def show_result(result):
+    print('コンピューターのカードは')
+    show_cards(players[1].cards)
+    if result == 'win':
+        print(players[0].name + 'の勝ち')
+    elif result == 'loose':
+        print(players[0].name + 'の勝ち')
+    else:
+        print('引き分け')
 
 
 def play():

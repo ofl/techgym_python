@@ -47,6 +47,16 @@ class Player:
         self.total_number = 0
 
 
+class Human(Player):
+    def __init__(self):
+        super().__init__('自分')
+
+
+class Computer(Player):
+    def __init__(self):
+        super().__init__('コンピューター')
+
+
 def create_cards():
     cards.clear()
     marks = ['ハート', 'スペード', 'ダイヤ', 'クローバー']

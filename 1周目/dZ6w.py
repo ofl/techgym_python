@@ -53,10 +53,19 @@ def create_cards():
                 Card(mark, display_names[j], number, card_images[i*len(numbers)+j]))
 
 
+def show_card():
+    card = cards[11]
+    print(f"{card.mark}{card.display_name}")
+    plt.subplot(1, 6, 1)
+    plt.imshow(card.image)
+    plt.show()
+
+
 def play():
     print('デバッグログ：play()')
     load_image()
     create_cards()
+    show_card()
 
 
 play()
