@@ -54,7 +54,7 @@ for season in seasons:
 # Drill 7の回答例
 
 seasons = ['春', '夏', '秋', '冬']
-years = [2020, 2021]
+years = [2020, 2021, 2022]
 
 for year in years:
     for season in seasons:
