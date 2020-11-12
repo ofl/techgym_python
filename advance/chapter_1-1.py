@@ -1,3 +1,8 @@
+'''
+1章の改良
+クラス化した
+'''
+
 import random
 import time
 
