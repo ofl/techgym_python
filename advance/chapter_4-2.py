@@ -73,7 +73,7 @@ class Human(Player):
 class Computer(Player):
     def get_bet(self, cell_dict):
         bet_coin = random.randint(1, self.max_bet_coin)
-        bet_cell_number = random.randint(0, 8)
+        bet_cell_number = random.randint(1, 8)
         cell = cell_dict[str(bet_cell_number + 1)]
         return super().create_bet(bet_coin, cell)
 
