@@ -1,3 +1,7 @@
+'''
+プレイヤーの手札をPlayerCardsというクラスに分離した
+'''
+
 import requests
 import cv2 as cv
 import os
@@ -6,11 +10,79 @@ import numpy as np
 import random
 
 
+class Game:
+    def __init__(self, players, game_class):
+        self.players = players
+        self.game_class = game_class
+
+    def play(self):
+        game = self.game_class(self.players)
+        game.play()
+
+
+class BlackJack:
+    def __init__(self, players):
+        self.players = players
+        self.card_set = CardSet()
+
+    def play(self):
+        player = self.players[0]
+        dealer = self.players[1]
+
+        player.cards.draw_from(self.card_set)
+        dealer.cards.draw_from(self.card_set)
+        player.cards.draw_from(self.card_set)
+        dealer.cards.draw_from(self.card_set)
+
+        player.cards.show()
+
+        player.draw_or_stand(self.card_set)
+        dealer.draw_or_stand(self.card_set)
+
+        winner = self.__get_winner()
+        self.__show_result(winner)
+
+    def __show_result(self, winner):
+        for player in self.players:
+            print(f"{player.name}のカードは")
+            player.cards.show()
+
+        if winner is None:
+            print('引き分け')
+        else:
+            print(f"{winner.name}の勝ち")
+
+    def __get_winner(self):
+        player = self.players[0]
+        dealer = self.players[1]
+
+        player_is_burst = player.cards.is_burst
+        dealer_is_burst = dealer.cards.is_burst
+
+        if player_is_burst and dealer_is_burst:
+            return None
+        elif dealer_is_burst:
+            return player
+        elif player_is_burst:
+            return dealer
+
+        player_total = player.cards.number_for_judge
+        dealer_total = dealer.cards.number_for_judge
+
+        if player_total == dealer_total:
+            return None
+        elif player_total > dealer_total:
+            return player
+        else:
+            return dealer
+
+
 class Card:
     def __init__(self, mark, display_name, image):
         self.mark = mark
         self.display_name = display_name
         self.image = image
+        # 配布済みかどうか
         self.is_dealt = False
 
     def numbers(self):
@@ -60,7 +132,7 @@ class CardSet:
         self.__cards = []
         self.__create_cards(image_set.card_images)
 
-    def hit(self):
+    def draw(self):
         tmp_cards = list(filter(lambda n: n.is_dealt == False, self.__cards))
         assert (len(tmp_cards) != 0), "残りカードなし"
 
@@ -77,7 +149,63 @@ class CardSet:
                     Card(mark, self.DISPLAY_NAMES[j], card_images[i*size+j]))
 
 
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.cards = PlayerCards()
+
+
+class Human(Player):
+    def __init__(self):
+        super().__init__('あなた')
+
+    def draw_or_stand(self, card_set):
+        while True:
+            if self.__stop_drawing():
+                break
+            else:
+                self.cards.draw_from(card_set)
+                self.cards.show()
+
+    def __stop_drawing(self):
+        if self.cards.is_burst:
+            return True
+
+        message = 'ヒット[1] or スタンド[2]'
+        choice_key = input(message)
+        while not self.__enable_choice(choice_key):
+            choice_key = input(message)
+        return int(choice_key) == 2
+
+    def __enable_choice(self, string):
+        if not string.isdigit():
+            return False
+
+        return 1 <= int(string) <= 2
+
+
+class Computer(Player):
+    def __init__(self):
+        super().__init__('ディーラー')
+
+    def draw_or_stand(self, card_set):
+        while True:
+            if self.__stop_drawing():
+                break
+            else:
+                self.cards.draw_from(card_set)
+
+    def __stop_drawing(self):
+        if self.cards.is_burst:
+            return True
+
+        return self.cards.is_blackjack or self.cards.min_total_number >= 18
+
+
 class CardPlotter:
+    '''
+    カードを表示する
+    '''
     @staticmethod
     def show_cards(cards):
         for i, card in enumerate(cards):
@@ -88,54 +216,9 @@ class CardPlotter:
         plt.show()
 
 
-class Player:
-    def __init__(self, name):
-        self.name = name
-        self.cards_in_hand = None
+class PlayerCards:
+    BLACK_JACK = 21
 
-
-class Human(Player):
-    def __init__(self):
-        super().__init__('自分')
-
-    def hit_or_stand(self, card_set):
-        while True:
-            if self.__stop_hitting():
-                break
-            else:
-                self.cards_in_hand.hit_from(card_set)
-                self.cards_in_hand.show()
-
-    def __stop_hitting(self):
-        if self.cards_in_hand.is_burst():
-            return True
-
-        message = 'ヒット[1] or スタンド[2]'
-        choice_key = input(message)
-        while not enable_choice(choice_key):
-            choice_key = input(message)
-        return int(choice_key) == 2
-
-
-class Computer(Player):
-    def __init__(self):
-        super().__init__('コンピューター')
-
-    def hit_or_stand(self, card_set):
-        while True:
-            if self.__stop_hitting():
-                break
-            else:
-                self.cards_in_hand.hit_from(card_set)
-
-    def __stop_hitting(self):
-        if self.cards_in_hand.is_burst():
-            return True
-
-        return self.cards_in_hand.is_blackjack() or self.cards_in_hand.min_total_number() >= 18
-
-
-class PlayerCardsInHand:
     def __init__(self, plotter_class=CardPlotter):
         self.cards = []
         self.__total_numbers = [0]
@@ -144,25 +227,29 @@ class PlayerCardsInHand:
     def show(self):
         self.plotter_class.show_cards(self.cards)
 
-    def hit_from(self, card_set):
-        self.cards.append(card_set.hit())
+    def draw_from(self, card_set):
+        self.cards.append(card_set.draw())
         self.__update_total_numbers()
 
+    @property
     def is_blackjack(self):
-        return BLACK_JACK in self.__total_numbers
+        return self.BLACK_JACK in self.__total_numbers
 
+    @property
     def is_burst(self):
-        return self.min_total_number() > BLACK_JACK
+        return self.min_total_number > self.BLACK_JACK
 
+    @property
     def number_for_judge(self):
         not_burst_numbers = list(
-            filter(lambda n: n < BLACK_JACK, self.__total_numbers))
+            filter(lambda n: n < self.BLACK_JACK, self.__total_numbers))
 
         if len(not_burst_numbers) > 0:
             return max(not_burst_numbers)
         else:
-            return self.min_total_number()
+            return self.min_total_number
 
+    @property
     def min_total_number(self):
         return min(self.__total_numbers)
 
@@ -177,85 +264,7 @@ class PlayerCardsInHand:
         self.__total_numbers = totals
 
 
-def enable_choice(string):
-    if not string.isdigit():
-        return False
-
-    return 1 <= int(string) <= 2
-
-
-class BlackJack:
-    def __init__(self, players):
-        self.players = players
-        self.card_set = CardSet()
-        for player in players:
-            player.cards_in_hand = PlayerCardsInHand()
-
-    def play(self):
-        player = self.players[0]
-        dealer = self.players[1]
-
-        player.cards_in_hand.hit_from(self.card_set)
-        dealer.cards_in_hand.hit_from(self.card_set)
-        player.cards_in_hand.hit_from(self.card_set)
-        dealer.cards_in_hand.hit_from(self.card_set)
-
-        player.cards_in_hand.show()
-
-        player.hit_or_stand(self.card_set)
-        dealer.hit_or_stand(self.card_set)
-
-        winner = self.__get_winner()
-        self.__show_result(winner)
-
-    def __show_result(self, winner):
-        for player in self.players:
-            print(f"{player.name}のカードは")
-            player.cards_in_hand.show()
-
-        if winner is None:
-            print('引き分け')
-        else:
-            print(f"{winner.name}の勝ち")
-
-    def __get_winner(self):
-        player = self.players[0]
-        dealer = self.players[1]
-
-        player_is_burst = player.cards_in_hand.is_burst()
-        dealer_is_burst = dealer.cards_in_hand.is_burst()
-
-        if player_is_burst and dealer_is_burst:
-            return None
-        elif dealer_is_burst:
-            return player
-        elif player_is_burst:
-            return dealer
-
-        player_total = player.cards_in_hand.number_for_judge()
-        dealer_total = dealer.cards_in_hand.number_for_judge()
-
-        if player_total == dealer_total:
-            return None
-        elif player_total > dealer_total:
-            return player
-        else:
-            return dealer
-
-
-class Game:
-    def __init__(self, players, game_class):
-        self.players = players
-        self.game_class = game_class
-
-    def play(self):
-        game = self.game_class(self.players)
-        game.play()
-
-
 if __name__ == "__main__":
-    BLACK_JACK = 21
-
     players = []
     players.append(Human())
     players.append(Computer())
