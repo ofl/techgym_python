@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <title>ジャンケンゲーム</title>
+</head>
+<body>
+    <main>
+        <p id='result'>検証のconsoleをみてください</p>
+    </main>
+<script>
+
+const hands = ['グー', 'チョキ', 'パー'];
+
+function start_message(){
+    print('じゃんけんスタート');
+}
+
+function get_my_hand() {
+    print('自分の手を入力してください');
+    return parseInt(prompt('0:グー, 1:チョキ, 2:パー'), 10);
+}
+
+function get_you_hand() {
+    return Math.floor(Math.random() * 3);
+}
+
+function view_result(hand_diff) {
+    if (hand_diff == 0) {
+        print('あいこ');
+    } else if (hand_diff == -1 || hand_diff == 2 ) {
+        print('勝ち');
+    } else {
+        print('負け');
+    }
+}
+
+function get_hand_name(hand_number) {
+    return hands[hand_number];
+}
+
+function view_hand(my_hand, you_hand) {
+    print('自分の手は' + get_hand_name(my_hand));
+    print('相手の手は' + get_hand_name(you_hand));
+}
+
+function print(str) {
+    console.log(str);
+}
+
+start_message();
+const my_hand = get_my_hand();
+
+const you_hand = get_you_hand();
+view_hand(my_hand, you_hand)
+
+const hand_diff = my_hand -you_hand;
+view_result(hand_diff);
+
+</script>
+</body>
+</html>
