@@ -1,22 +1,3 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="utf-8" />
-    <title>ジャンケンゲーム</title>
-</head>
-<body>
-    <main>
-        <p id='start_message'></p>
-        <button class='hands' value=0>グー</button>
-        <button class='hands' value=1>チョキ</button>
-        <button class='hands' value=2>パー</button>
-        <p id='please_enter'></p>
-        <p id='you_hand'></p>
-        <p id='my_hand'></p>
-        <p id='result'></p>
-    </main>
-    <script>
-
 const hands = ['グー', 'チョキ', 'パー'];
 
 function start_message(){
@@ -60,8 +41,6 @@ function print(place, str) {
     element.innerHTML = str;
 }
 
-start_message();
-
 // グーチョキパーのボタンを押した時にplay関数を実行するための設定
 const buttons = document.querySelectorAll('.hands');
 buttons.forEach(button => { 
@@ -70,6 +49,4 @@ buttons.forEach(button => {
     })
 });
 
-    </script>
-</body>
-</html>
+start_message();
